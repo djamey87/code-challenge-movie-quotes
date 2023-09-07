@@ -3,8 +3,22 @@ import { TextStyle, ViewStyle } from "react-native";
 const container: ViewStyle = {
   flex: 1,
   backgroundColor: "#fff",
-  alignItems: "center",
-  justifyContent: "center",
+  padding: 12,
+  // alignItems: "center",
+  // justifyContent: "center",
+  // backgroundColor: "#f00",
+};
+
+const listContainer: ViewStyle = {
+  backgroundColor: "#f00",
+};
+
+const card: ViewStyle = {
+  paddingVertical: 12,
+  paddingHorizontal: 12,
+  borderRadius: 3,
+  borderWidth: 1,
+  marginVertical: 12,
 };
 
 const contentContainer: ViewStyle = {
@@ -34,9 +48,11 @@ const marginTop12: ViewStyle = {
 };
 
 export default {
+  card,
   container,
   contentContainer,
   flex,
   input,
+  listContainer,
   marginTop12,
 };

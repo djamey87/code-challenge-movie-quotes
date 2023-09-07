@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   Text,
@@ -7,23 +7,59 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
+  FlatList,
+  SafeAreaView,
 } from "react-native";
 import BottomDrawer, {
   BottomDrawerMethods,
 } from "react-native-animated-bottom-drawer";
 
 import styles from "./styles";
+import { AddFormDrawer } from "./components/AddFormDrawer";
+// import DragList, { DragListRenderItemInfo } from "react-native-draglist";
+
+const DATA = [
+  {
+    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+    title: "First Item",
+  },
+  {
+    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+    title: "Second Item",
+  },
+  {
+    id: "58694a0f-3da1-471f-bd96-145571e29d72",
+    title: "Third Item",
+  },
+];
+type ItemProps = { title: string };
+
+const Item = ({ title }: ItemProps) => (
+  <View style={styles.card}>
+    <Text>{title}</Text>
+  </View>
+);
 
 export default function App() {
+  const [data, setData] = useState(DATA);
+
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={data}
+          renderItem={({ item }) => <Item title={item.title} />}
+          keyExtractor={(item) => item.id}
+        />
+        <Button
+          title="Add Quote"
+          onPress={() => bottomDrawerRef.current?.open()}
+        />
+      </SafeAreaView>
 
-      <Button
-        title="Add Quote"
-        onPress={() => bottomDrawerRef.current?.open()}
-      />
       <StatusBar style="auto" />
 
       <BottomDrawer ref={bottomDrawerRef}>
