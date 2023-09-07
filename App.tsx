@@ -19,7 +19,7 @@ import styles from "./styles";
 import { AddFormDrawer } from "./components/AddFormDrawer";
 // import DragList, { DragListRenderItemInfo } from "react-native-draglist";
 
-const DATA = [
+let mockDataStore = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
     title: "First Item",
@@ -42,13 +42,15 @@ const Item = ({ title }: ItemProps) => (
 );
 
 export default function App() {
-  const [data, setData] = useState(DATA);
+  const [data, setData] = useState(mockDataStore);
+  const [text, setText] = useState("");
 
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
+        <Text>Movie Quotes</Text>
         <FlatList
           data={data}
           renderItem={({ item }) => <Item title={item.title} />}
@@ -74,10 +76,22 @@ export default function App() {
             numberOfLines={6}
             multiline={true}
             placeholder="Keep the change ya filthy animal!"
+            onChangeText={(newText) => setText(newText)}
+            defaultValue={text}
           ></TextInput>
 
           <View style={styles.marginTop12}>
-            <Button title="Add" onPress={() => {}} />
+            <Button
+              title="Add"
+              onPress={() => {
+                setData((current) => [
+                  ...current,
+                  { id: "dave-" + Math.random(), title: text },
+                ]);
+                setText("");
+                bottomDrawerRef.current?.close();
+              }}
+            />
           </View>
         </KeyboardAvoidingView>
       </BottomDrawer>
