@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import useStorage from "./useStorage";
 
 interface Quote {
   id: string;
@@ -63,15 +64,24 @@ function quoteReducer(state: QuoteState, action: ProductActions) {
 }
 
 export function useQuotes({ reducer = quoteReducer } = {}) {
-  // replace with local storage
-  // const { data, error } = useFetch<ProductResponse>(PRODUCTS_URL);
-  const [{ quotes }, dispatch] = React.useReducer(reducer, defaultQuoteState);
+  const [{ quotes: storedQuotes }, updateStorage, clearStore] = useStorage(
+    "@quotes_storage",
+    { quotes: [] as Quote[] }
+  );
+  const [{ quotes }, dispatch] = React.useReducer(reducer, {
+    ...defaultQuoteState,
+    quotes: storedQuotes,
+  });
 
   useEffect(() => {
-    if (mockDataStore) {
-      dispatch({ type: ActionTypes.LOAD_QUOTES, payload: mockDataStore });
+    if (storedQuotes) {
+      dispatch({ type: ActionTypes.LOAD_QUOTES, payload: storedQuotes });
     }
-  }, [mockDataStore]);
+  }, [storedQuotes]);
+
+  useEffect(() => {
+    updateStorage({ quotes });
+  }, [quotes]);
 
   const addQuote = (text: string) =>
     dispatch({ type: ActionTypes.ADD_QUOTE, payload: text });
