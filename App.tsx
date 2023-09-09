@@ -7,7 +7,6 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity,
   FlatList,
   SafeAreaView,
 } from "react-native";
@@ -16,23 +15,23 @@ import BottomDrawer, {
 } from "react-native-animated-bottom-drawer";
 
 import styles from "./styles";
-import { AddFormDrawer } from "./components/AddFormDrawer";
+import { useQuotes } from "./hooks/useQuotes";
 // import DragList, { DragListRenderItemInfo } from "react-native-draglist";
 
-let mockDataStore = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-];
+// let mockDataStore = [
+//   {
+//     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+//     title: "First Item",
+//   },
+//   {
+//     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+//     title: "Second Item",
+//   },
+//   {
+//     id: "58694a0f-3da1-471f-bd96-145571e29d72",
+//     title: "Third Item",
+//   },
+// ];
 type ItemProps = { title: string };
 
 const Item = ({ title }: ItemProps) => (
@@ -42,7 +41,8 @@ const Item = ({ title }: ItemProps) => (
 );
 
 export default function App() {
-  const [data, setData] = useState(mockDataStore);
+  // const [data, setData] = useState(mockDataStore);
+  const { quotes, addQuote } = useQuotes();
   const [text, setText] = useState("");
 
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
@@ -52,8 +52,8 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <Text>Movie Quotes</Text>
         <FlatList
-          data={data}
-          renderItem={({ item }) => <Item title={item.title} />}
+          data={quotes}
+          renderItem={({ item }) => <Item title={item.text} />}
           keyExtractor={(item) => item.id}
         />
         <Button
@@ -84,10 +84,7 @@ export default function App() {
             <Button
               title="Add"
               onPress={() => {
-                setData((current) => [
-                  ...current,
-                  { id: "dave-" + Math.random(), title: text },
-                ]);
+                addQuote(text);
                 setText("");
                 bottomDrawerRef.current?.close();
               }}
