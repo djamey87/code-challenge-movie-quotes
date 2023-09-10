@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 import useStorage from "./useStorage";
+import { array_move, generateUUID } from "../utils";
 
 interface Quote {
   id: string;
@@ -10,6 +10,7 @@ interface Quote {
 enum ActionTypes {
   LOAD_QUOTES = "LOAD_QUOTES",
   ADD_QUOTE = "ADD_QUOTE",
+  UPDATE_QUOTE_POSITION = "UPDATE_QUOTE_POSITION",
 }
 
 interface QuoteState {
@@ -26,25 +27,18 @@ interface AddQuotesAction {
   payload: string;
 }
 
-type ProductActions = LoadQuotesAction | AddQuotesAction;
+interface UpdateQuotePositionAction {
+  type: ActionTypes.UPDATE_QUOTE_POSITION;
+  payload: { currentIndex: number; targetIndex: number };
+}
 
-const mockDataStore = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    text: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    text: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    text: "Third Item",
-  },
-];
+type ProductActions =
+  | LoadQuotesAction
+  | AddQuotesAction
+  | UpdateQuotePositionAction;
 
 const defaultQuoteState = {
-  quotes: mockDataStore,
+  quotes: [],
 };
 
 function quoteReducer(state: QuoteState, action: ProductActions) {
@@ -53,9 +47,20 @@ function quoteReducer(state: QuoteState, action: ProductActions) {
       return { quotes: action.payload };
     }
     case ActionTypes.ADD_QUOTE: {
-      // TODO: resolve id utils
-      const newQuote = { text: action.payload, id: String(Math.random()) };
+      const newQuote = {
+        text: action.payload,
+        id: generateUUID(),
+      };
       return { quotes: [...state.quotes, newQuote] };
+    }
+    case ActionTypes.UPDATE_QUOTE_POSITION: {
+      const newQuoteOrder = array_move(
+        state.quotes,
+        action.payload.currentIndex,
+        action.payload.targetIndex
+      );
+
+      return { quotes: newQuoteOrder };
     }
     default: {
       throw new Error(`Unhandled type`);
@@ -69,7 +74,6 @@ export function useQuotes({ reducer = quoteReducer } = {}) {
     { quotes: [] as Quote[] }
   );
   const [{ quotes }, dispatch] = React.useReducer(reducer, {
-    ...defaultQuoteState,
     quotes: storedQuotes,
   });
 
@@ -86,5 +90,11 @@ export function useQuotes({ reducer = quoteReducer } = {}) {
   const addQuote = (text: string) =>
     dispatch({ type: ActionTypes.ADD_QUOTE, payload: text });
 
-  return { quotes, addQuote };
+  const updatePosition = (currentIndex: number, targetIndex: number) =>
+    dispatch({
+      type: ActionTypes.UPDATE_QUOTE_POSITION,
+      payload: { currentIndex, targetIndex },
+    });
+
+  return { quotes, addQuote, updatePosition };
 }
