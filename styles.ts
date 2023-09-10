@@ -56,11 +56,19 @@ const marginTop12: ViewStyle = {
   marginTop: 12,
 };
 
+const formTitle: TextStyle = {
+  fontSize: 20,
+  lineHeight: 24,
+  fontWeight: "bold",
+  letterSpacing: 0.25,
+};
+
 export default {
   card,
   container,
   contentContainer,
   flex,
+  formTitle,
   header,
   input,
   listContainer,

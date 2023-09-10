@@ -75,11 +75,8 @@ export default function App() {
       <StatusBar style="auto" />
 
       <BottomDrawer ref={bottomDrawerRef}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.contentContainer}
-        >
-          <Text>Add your movie quote</Text>
+        <KeyboardAvoidingView style={styles.contentContainer}>
+          <Text style={styles.formTitle}>Add your movie quote</Text>
 
           <TextInput
             style={{ ...styles.input, ...styles.marginTop12 }}
@@ -91,7 +88,7 @@ export default function App() {
           ></TextInput>
 
           <View style={styles.marginTop12}>
-            <Button
+            <ThemedButton
               title="Add"
               onPress={() => {
                 addQuote(text);
