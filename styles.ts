@@ -35,9 +35,8 @@ const input: TextStyle = {
   borderColor: "#000",
   borderRadius: 3,
   paddingHorizontal: 12,
-  paddingVertical: 6,
+  paddingVertical: 12,
   width: "100%",
-  minHeight: 100, // Adjust the height as needed
   textAlignVertical: "top",
 };
 

@@ -5,6 +5,7 @@ import { array_move, generateUUID } from "../utils";
 interface Quote {
   id: string;
   text: string;
+  origin: string;
 }
 
 enum ActionTypes {
@@ -24,7 +25,7 @@ interface LoadQuotesAction {
 
 interface AddQuotesAction {
   type: ActionTypes.ADD_QUOTE;
-  payload: string;
+  payload: Omit<Quote, "id">;
 }
 
 interface UpdateQuotePositionAction {
@@ -47,8 +48,10 @@ function quoteReducer(state: QuoteState, action: ProductActions) {
       return { quotes: action.payload };
     }
     case ActionTypes.ADD_QUOTE: {
+      const { text, origin } = action.payload;
       const newQuote = {
-        text: action.payload,
+        text,
+        origin,
         id: generateUUID(),
       };
       return { quotes: [...state.quotes, newQuote] };
@@ -87,8 +90,8 @@ export function useQuotes({ reducer = quoteReducer } = {}) {
     updateStorage({ quotes });
   }, [quotes]);
 
-  const addQuote = (text: string) =>
-    dispatch({ type: ActionTypes.ADD_QUOTE, payload: text });
+  const addQuote = (text: string, origin: string) =>
+    dispatch({ type: ActionTypes.ADD_QUOTE, payload: { text, origin } });
 
   const updatePosition = (currentIndex: number, targetIndex: number) =>
     dispatch({

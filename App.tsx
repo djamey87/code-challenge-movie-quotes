@@ -22,14 +22,16 @@ import { ThemedButton } from "./components/ThemedButton";
 
 type ItemProps = {
   title: string;
+  origin: string;
   renderButton: boolean;
   onUpPress: () => void;
 };
 
-const Item = ({ title, renderButton, onUpPress }: ItemProps) => (
+const Item = ({ title, origin, renderButton, onUpPress }: ItemProps) => (
   <View style={styles.card}>
     <View style={{ flex: 1 }}>
       <Text>"{title}"</Text>
+      <Text>- {origin}</Text>
     </View>
     {!renderButton ? null : (
       <View style={{ marginLeft: 2 }}>
@@ -46,6 +48,7 @@ const Item = ({ title, renderButton, onUpPress }: ItemProps) => (
 export default function App() {
   const { quotes, addQuote, updatePosition } = useQuotes();
   const [text, setText] = useState("");
+  const [origin, setOrigin] = useState("");
 
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
 
@@ -57,9 +60,10 @@ export default function App() {
         </View>
         <FlatList
           data={quotes}
-          renderItem={({ item: { text }, index }) => (
+          renderItem={({ item: { text, origin }, index }) => (
             <Item
               title={text}
+              origin={origin}
               renderButton={index !== 0}
               onUpPress={() => updatePosition(index, index - 1)}
             />
@@ -79,20 +83,28 @@ export default function App() {
           <Text style={styles.formTitle}>Add your movie quote</Text>
 
           <TextInput
-            style={{ ...styles.input, ...styles.marginTop12 }}
+            style={{ ...styles.input, ...styles.marginTop12, minHeight: 100 }}
             numberOfLines={6}
             multiline={true}
             placeholder="Keep the change ya filthy animal!"
             onChangeText={(newText) => setText(newText)}
             defaultValue={text}
           ></TextInput>
+          <TextInput
+            style={{ ...styles.input, ...styles.marginTop12 }}
+            numberOfLines={1}
+            placeholder="Home alone"
+            onChangeText={(newText) => setOrigin(newText)}
+            defaultValue={origin}
+          ></TextInput>
 
           <View style={styles.marginTop12}>
             <ThemedButton
               title="Add"
               onPress={() => {
-                addQuote(text);
+                addQuote(text, origin);
                 setText("");
+                setOrigin("");
                 bottomDrawerRef.current?.close();
               }}
             />
