@@ -16,7 +16,7 @@ import BottomDrawer, {
 
 import styles from "./styles";
 import { useQuotes } from "./hooks/useQuotes";
-// import DragList, { DragListRenderItemInfo } from "react-native-draglist";
+// import DragList, { DragListRenderItemInfo } from "react-native-draglist"; // tried and failed this implementation with expo
 
 type ItemProps = {
   title: string;
