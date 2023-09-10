@@ -9,6 +9,7 @@ import {
   Platform,
   FlatList,
   SafeAreaView,
+  Image,
 } from "react-native";
 import BottomDrawer, {
   BottomDrawerMethods,
@@ -16,6 +17,7 @@ import BottomDrawer, {
 
 import styles from "./styles";
 import { useQuotes } from "./hooks/useQuotes";
+import { ThemedButton } from "./components/ThemedButton";
 // import DragList, { DragListRenderItemInfo } from "react-native-draglist"; // tried and failed this implementation with expo
 
 type ItemProps = {
@@ -26,8 +28,18 @@ type ItemProps = {
 
 const Item = ({ title, renderButton, onUpPress }: ItemProps) => (
   <View style={styles.card}>
-    <Text>{title}</Text>
-    {!renderButton ? null : <Button title="^" onPress={onUpPress} />}
+    <View style={{ flex: 1 }}>
+      <Text>"{title}"</Text>
+    </View>
+    {!renderButton ? null : (
+      <View style={{ marginLeft: 2 }}>
+        <ThemedButton
+          title="^"
+          onPress={onUpPress}
+          styleOverride={{ paddingHorizontal: 12 }}
+        />
+      </View>
+    )}
   </View>
 );
 
@@ -40,7 +52,9 @@ export default function App() {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
-        <Text>Movie Quotes</Text>
+        <View style={styles.header}>
+          <Image source={require("./assets/logo.png")} />
+        </View>
         <FlatList
           data={quotes}
           renderItem={({ item: { text }, index }) => (
@@ -52,7 +66,7 @@ export default function App() {
           )}
           keyExtractor={(item) => item.id}
         />
-        <Button
+        <ThemedButton
           title="Add Quote"
           onPress={() => bottomDrawerRef.current?.open()}
         />

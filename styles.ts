@@ -4,9 +4,7 @@ const container: ViewStyle = {
   flex: 1,
   backgroundColor: "#fff",
   padding: 12,
-  // alignItems: "center",
-  // justifyContent: "center",
-  // backgroundColor: "#f00",
+  flexDirection: "column",
 };
 
 const listContainer: ViewStyle = {
@@ -19,6 +17,10 @@ const card: ViewStyle = {
   borderRadius: 3,
   borderWidth: 1,
   marginVertical: 12,
+  flex: 1,
+  flexDirection: "row",
+  justifyContent: "center",
+  alignContent: "center",
 };
 
 const contentContainer: ViewStyle = {
@@ -39,6 +41,13 @@ const input: TextStyle = {
   textAlignVertical: "top",
 };
 
+const header: ViewStyle = {
+  alignItems: "center",
+  paddingBottom: 12,
+  borderBottomColor: "#000",
+  borderBottomWidth: 2,
+};
+
 const flex: ViewStyle = {
   flex: 1,
 };
@@ -52,6 +61,7 @@ export default {
   container,
   contentContainer,
   flex,
+  header,
   input,
   listContainer,
   marginTop12,
