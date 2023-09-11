@@ -26,4 +26,5 @@ The first step is to build out the personal "movie quote ranking" feature
 - Added jest for initial unit / component level tests
 - A simple drawer system added to house the add form.
 - Expo compatibility issues with drag and drop libraries (reanimated conflict) led me to implement a simplified ranking UX in order to stay within time boundaries.
+- using async local storage library to persist data on the device
 - The UI is very raw, utilising basic styles I would have utilised a lib like [kitten](https://github.com/akveo/react-native-ui-kitten) for something more polished if there was more time to become familiar with it.
